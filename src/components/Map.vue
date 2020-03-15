@@ -2,12 +2,14 @@
   <div>
     <svg class="map" ref="map">
       <MapLayer :layerConfiguration="neighborhoodsLayer" />
+      <VehiclesLayer :layerConfiguration="vehicleLayer" />
     </svg>
   </div>
 </template>
 
 <script>
   import MapLayer from './MapLayer.vue';
+  import VehiclesLayer from './VehiclesLayer.vue';
   import * as d3 from 'd3';
 
   export default {
@@ -29,6 +31,15 @@
           projectionConfiguration: null,
         },
 
+        vehicleLayer: {
+          jsonPath: null,
+          style: {
+            fill: null,
+            stroke: null,
+          },
+          projectionConfiguration: null,
+        },
+
         streetsLayer: {
           jsonPath: null,
           style: {
@@ -41,6 +52,7 @@
     },
     components: {
       MapLayer,
+      VehiclesLayer,
     },
     created() {
       this.projectionConfiguration = {
@@ -54,6 +66,16 @@
         style: {
           fill: '#ccc',
           stroke: '#333',
+        },
+        projectionConfiguration: { ...this.projectionConfiguration },
+      };
+
+      this.vehicleLayer = {
+        jsonPath: 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=sf-muni&r=N',
+        // jsonPath: 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=sf-muni&r=N',
+        style: {
+          fill: 'red',
+          r: '5px',
         },
         projectionConfiguration: { ...this.projectionConfiguration },
       };
