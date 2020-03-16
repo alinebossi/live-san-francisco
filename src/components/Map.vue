@@ -2,6 +2,8 @@
   <div>
     <svg class="map" ref="map">
       <MapLayer :layerConfiguration="neighborhoodsLayer" />
+      <MapLayer :layerConfiguration="arteriesLayer" />
+      <MapLayer :layerConfiguration="streetsLayer" />  
       <VehiclesLayer :layerConfiguration="vehicleLayer" />
     </svg>
   </div>
@@ -40,6 +42,15 @@
           projectionConfiguration: null,
         },
 
+        arteriesLayer: {
+          jsonPath: null,
+          style: {
+            fill: null,
+            stroke: null,
+          },
+          projectionConfiguration: null,
+        },
+
         streetsLayer: {
           jsonPath: null,
           style: {
@@ -48,6 +59,7 @@
           },
           projectionConfiguration: null,
         },
+        
       };
     },
     components: {
@@ -64,18 +76,35 @@
       this.neighborhoodsLayer = {
         jsonPath: './sfmaps/neighborhoods.json',
         style: {
-          fill: '#ccc',
-          stroke: '#333',
+          fill: '#FFF',
+          stroke: '#F5BE42',
+        },
+        projectionConfiguration: { ...this.projectionConfiguration },
+      };
+
+      this.arteriesLayer = {
+        jsonPath: './sfmaps/arteries.json',
+        style: {
+          fill: '#FFF',
+          stroke: '#F5BE42',
+        },
+        projectionConfiguration: { ...this.projectionConfiguration },
+      };
+
+      this.streetsLayer = {
+        jsonPath: './sfmaps/streets.json',
+        style: {
+          fill: '#FFF',
+          stroke: '#F5BE42',
         },
         projectionConfiguration: { ...this.projectionConfiguration },
       };
 
       this.vehicleLayer = {
-        jsonPath: 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=sf-muni&r=N',
-        // jsonPath: 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=sf-muni&r=N',
+        jsonPath: 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=sf-muni',
         style: {
-          fill: 'red',
-          r: '5px',
+          fill: '#000',
+          r: '4px',
         },
         projectionConfiguration: { ...this.projectionConfiguration },
       };
