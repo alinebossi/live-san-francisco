@@ -35,8 +35,19 @@
               .attr('cx', data => projection([data.lon, data.lat])[0])
               .attr('cy', data => projection([data.lon, data.lat])[1])
               .attr('r', this.layerConfiguration.style.r)
-              .attr('fill', this.layerConfiguration.style.fill);
+              .attr('fill', this.layerConfiguration.style.fill)
           });
+      },
+    },
+    watch: {
+      $route(route) {
+        var urlVehicle =
+          'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=sf-muni&r=' +
+          route.params.routerTag;
+        
+        this.layerConfiguration.jsonPath = urlVehicle;
+        this.drawVehicles();
+
       },
     },
     mounted() {
