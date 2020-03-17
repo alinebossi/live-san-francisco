@@ -8,7 +8,10 @@ export default {
 		return {
 			loading: false,
 			vehicle: {
-				selected: '',
+				list: null,
+				hasError: false,
+			},
+			map: {
 				list: null,
 				hasError: false,
 			},

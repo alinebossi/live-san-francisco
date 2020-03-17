@@ -16,5 +16,16 @@ export default {
 			hasError,
 		};
 	},
-	
+	[types.SET_MAP_LIST](state, list) {
+		state.map = {
+			...state.map,
+			list,
+		};
+	},
+	[types.SET_MAP_HAS_ERROR](state, hasError) {
+		state.map = {
+			...state.map,
+			hasError,
+		};
+	},
 };
