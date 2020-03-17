@@ -9,6 +9,10 @@
     name: 'VehiclesLayer',
     props: ['layerConfiguration'],
     methods: {
+      updatePath: function(routeURL) {
+        var urlVehicle = this.layerConfiguration.jsonPath + '&r=' + routeURL;
+        this.layerConfiguration.jsonPath = urlVehicle;
+      },
       drawVehicles: function() {
         // D3 Projection
         var projection = d3
@@ -35,19 +39,14 @@
               .attr('cx', data => projection([data.lon, data.lat])[0])
               .attr('cy', data => projection([data.lon, data.lat])[1])
               .attr('r', this.layerConfiguration.style.r)
-              .attr('fill', this.layerConfiguration.style.fill)
+              .attr('fill', this.layerConfiguration.style.fill);
           });
       },
     },
     watch: {
       $route(route) {
-        var urlVehicle =
-          'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=sf-muni&r=' +
-          route.params.routerTag;
-        
-        this.layerConfiguration.jsonPath = urlVehicle;
+        this.updatePath(route.params.routerTag);
         this.drawVehicles();
-
       },
     },
     mounted() {
