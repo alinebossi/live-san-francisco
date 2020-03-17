@@ -2,7 +2,7 @@
   <div id="app">
     <div class="row" id="body-row">
       <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
-        <RouterList />
+        <RoutesMenu />
       </div>
       <div class="col p-4">
         <RouterView/>
@@ -13,12 +13,12 @@
 </template>
 
 <script>
-  import RouterList from './components/Routes.vue';
+  import RoutesMenu from './components/RoutesMenu.vue';
 
   export default {
     name: 'app',
     components: {
-      RouterList,
+      RoutesMenu,
     },
   };
 </script>

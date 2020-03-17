@@ -7,7 +7,7 @@
 </template>
 <script>
   export default {
-    name: 'RouterList',
+    name: 'RoutesMenu',
     data() {
       return {
         routeList: [],
