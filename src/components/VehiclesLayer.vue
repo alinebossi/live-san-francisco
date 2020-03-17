@@ -4,15 +4,27 @@
 
 <script>
   import * as d3 from 'd3';
+  import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'VehiclesLayer',
     props: ['layerConfiguration'],
+    computed: {
+      ...mapState('Map', {
+        vehiclesList: ({ vehicle }) => vehicle.list || [],
+      }),
+      ...mapGetters({
+        vehiclesLoadingState: 'Map/vehiclesLoadingState',
+        vehiclesInvalidState: 'Map/vehiclesInvalidState',
+      }),
+    },
+    created() {
+      this.loadVehicle();
+    },
     methods: {
-      updatePath: function(routeURL) {
-        var urlVehicle = this.layerConfiguration.jsonPath + '&r=' + routeURL;
-        this.layerConfiguration.jsonPath = urlVehicle;
-      },
+      ...mapActions({
+        loadVehicle: 'Map/getVehicles',
+      }),
       drawVehicles: function() {
         // D3 Projection
         var projection = d3
@@ -24,34 +36,35 @@
         d3.geoPath().projection(projection);
 
         // D3 Drow
-        fetch(this.layerConfiguration.jsonPath)
-          .then(response => response.json())
-          .then(layer => {
-            d3.select(this.$refs.layer)
-              .selectAll('circle')
-              .remove();
 
-            d3.select(this.$refs.layer)
-              .selectAll('circle')
-              .data(layer.vehicle)
-              .enter()
-              .append('circle')
-              .attr('cx', data => projection([data.lon, data.lat])[0])
-              .attr('cy', data => projection([data.lon, data.lat])[1])
-              .attr('r', this.layerConfiguration.style.r)
-              .attr('fill', this.layerConfiguration.style.fill);
-          });
+        d3.select(this.$refs.layer)
+          .selectAll('circle')
+          .remove();
+
+        d3.select(this.$refs.layer)
+          .selectAll('circle')
+          .data(this.vehiclesList)
+          .enter()
+          .append('circle')
+          .attr('cx', data => projection([data.lon, data.lat])[0])
+          .attr('cy', data => projection([data.lon, data.lat])[1])
+          .attr('r', this.layerConfiguration.style.r)
+          .attr('fill', this.layerConfiguration.style.fill);
       },
     },
     watch: {
       $route(route) {
-        this.updatePath(route.params.routerTag);
+        this.loadVehicle(route.params.routerTag);
         this.drawVehicles();
       },
     },
-    mounted() {
+    async mounted() {
       let interval = 15000;
-      this.interval = setInterval(() => this.drawVehicles(), interval);
+
+      this.interval = setInterval(() => {
+        this.drawVehicles();
+      }, interval);
+
       this.drawVehicles();
     },
     destroyed() {

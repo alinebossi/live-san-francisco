@@ -1,9 +1,14 @@
 <template>
   <div>
-    <svg class="map" ref="map">
+    <div class="d-flex justify-content-center" v-if="!showMap">
+      <div class="spinner-grow center-block text-warning">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <svg class="map" ref="map" v-show="showMap">
       <MapLayer :layerConfiguration="neighborhoodsLayer" />
       <MapLayer :layerConfiguration="arteriesLayer" />
-      <MapLayer :layerConfiguration="streetsLayer" />  
+      <MapLayer :layerConfiguration="streetsLayer" />
       <VehiclesLayer :layerConfiguration="vehicleLayer" />
     </svg>
   </div>
@@ -12,6 +17,7 @@
 <script>
   import MapLayer from './MapLayer.vue';
   import VehiclesLayer from './VehiclesLayer.vue';
+  import { mapState } from 'vuex';
   import * as d3 from 'd3';
 
   export default {
@@ -34,11 +40,11 @@
         },
 
         vehicleLayer: {
-          jsonPath: null,
           style: {
             fill: null,
             stroke: null,
           },
+          values: null,
           projectionConfiguration: null,
         },
 
@@ -59,8 +65,15 @@
           },
           projectionConfiguration: null,
         },
-        
       };
+    },
+    computed: {
+      ...mapState('Map', {
+        isLoading: state => state.loading,
+      }),
+      showMap() {
+        return !this.isLoading;
+      },
     },
     components: {
       MapLayer,
@@ -101,7 +114,6 @@
       };
 
       this.vehicleLayer = {
-        jsonPath: 'http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocations&a=sf-muni',
         style: {
           fill: '#000',
           r: '4px',
@@ -109,7 +121,7 @@
         projectionConfiguration: { ...this.projectionConfiguration },
       };
     },
-    mounted() {
+    async mounted() {
       // Map configuration
       d3.select(this.$refs.map)
         .attr('preserveAspectRatio', 'xMinYMin meet')
