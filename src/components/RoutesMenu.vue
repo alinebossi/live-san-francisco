@@ -27,3 +27,9 @@
     },
   };
 </script>
+<style lang="scss">
+  .menu-button {
+    background-color: #f5be42 !important;
+  }
+  
+</style>

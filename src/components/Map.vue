@@ -5,7 +5,7 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <div class="d-flex justify-content-center  overlay" v-if="showError">
+    <div class="d-flex justify-content-center overlay" v-if="showError">
       <span class="error"> Ops, there is a problem in connection. </span>
     </div>
     <svg class="map" ref="map">
@@ -71,10 +71,6 @@
       };
     },
     computed: {
-      // ...mapState('Map', {
-      //   isLoading: state => state.loading,
-      //   vehiclesError: state => state.hasError,
-      // }),
       ...mapState('Map', {
         isLoading: state => state.loading,
         vehiclesError: ({ vehicle }) => vehicle.hasError,
@@ -156,10 +152,18 @@
     bottom: 0;
 
     .spinner {
-      margin-top: 40%;
+      margin-top: 30%;
     }
     .error {
-      margin-top: 40%;
+      margin-top: 30%;
     }
+  }
+
+  .map { 
+    height: 100vh;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 </style>
