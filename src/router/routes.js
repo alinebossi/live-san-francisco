@@ -5,7 +5,8 @@ const routes = [
 		component: () => import(/* webpackChunkName: "Map" */ '../components/Map.vue'),
 	},
 	{
-		path: '/:routerTag',
+		path: '/',
+		query: { routerTag: '' },
 		name: 'map-route',
 		component: () => import(/* webpackChunkName: "Map" */ '../components/Map.vue'),
 	}
