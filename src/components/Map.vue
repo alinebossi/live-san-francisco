@@ -5,11 +5,11 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <svg class="map" ref="map" v-show="showMap">
+    <svg class="map" ref="map" >
       <MapLayer :layerConfiguration="neighborhoodsLayer" />
       <MapLayer :layerConfiguration="arteriesLayer" />
       <MapLayer :layerConfiguration="streetsLayer" />
-      <VehiclesLayer :layerConfiguration="vehicleLayer" />
+      <VehiclesLayer :layerConfiguration="vehicleLayer" v-show="showMap"/>
     </svg>
   </div>
 </template>
