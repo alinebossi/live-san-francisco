@@ -9,6 +9,11 @@
   export default {
     name: 'VehiclesLayer',
     props: ['layerConfiguration'],
+    data() {
+      return {
+        lastRoute: '',
+      };
+    },
     computed: {
       ...mapState('Map', {
         vehiclesList: ({ vehicle }) => vehicle.list || [],
@@ -18,13 +23,21 @@
         vehiclesInvalidState: 'Map/vehiclesInvalidState',
       }),
     },
-    created() {
-      this.loadVehicle();
-    },
     methods: {
       ...mapActions({
         loadVehicle: 'Map/getVehicles',
       }),
+      updateMap: async function() {
+        this.lastRoute = this.$route.query.routerTag;
+        await this.loadVehicle(this.lastRoute);
+        this.cleanVehicles();
+        this.drawVehicles();
+      },
+      cleanVehicles: function() {
+        d3.select(this.$refs.layer)
+          .selectAll('circle')
+          .remove();
+      },
       drawVehicles: function() {
         // D3 Projection
         var projection = d3
@@ -39,10 +52,6 @@
 
         d3.select(this.$refs.layer)
           .selectAll('circle')
-          .remove();
-
-        d3.select(this.$refs.layer)
-          .selectAll('circle')
           .data(this.vehiclesList)
           .enter()
           .append('circle')
@@ -53,19 +62,18 @@
       },
     },
     watch: {
-      $route(route) {
-        this.loadVehicle(route.params.routerTag);
-        this.drawVehicles();
+      async $route() {
+        this.updateMap();
       },
     },
-    async mounted() {
+    created() {
+      this.updateMap();
+    },
+    mounted() {
       let interval = 15000;
-
       this.interval = setInterval(() => {
-        this.drawVehicles();
+        this.updateMap();
       }, interval);
-
-      this.drawVehicles();
     },
     destroyed() {
       clearInterval(this.interval);
