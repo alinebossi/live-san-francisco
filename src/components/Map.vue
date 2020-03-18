@@ -1,15 +1,18 @@
 <template>
   <div>
-    <div class="d-flex justify-content-center" v-if="!showMap">
-      <div class="spinner-grow center-block text-warning">
+    <div class="d-flex justify-content-center overlay" v-if="!showMap">
+      <div class="spinner-grow text-warning spinner">
         <span class="sr-only">Loading...</span>
       </div>
     </div>
-    <svg class="map" ref="map" >
+    <div class="d-flex justify-content-center  overlay" v-if="showError">
+      <span class="error"> Ops, there is a problem in connection. </span>
+    </div>
+    <svg class="map" ref="map">
       <MapLayer :layerConfiguration="neighborhoodsLayer" />
       <MapLayer :layerConfiguration="arteriesLayer" />
       <MapLayer :layerConfiguration="streetsLayer" />
-      <VehiclesLayer :layerConfiguration="vehicleLayer" v-show="showMap"/>
+      <VehiclesLayer :layerConfiguration="vehicleLayer" v-show="showMap" />
     </svg>
   </div>
 </template>
@@ -17,7 +20,7 @@
 <script>
   import MapLayer from './MapLayer.vue';
   import VehiclesLayer from './VehiclesLayer.vue';
-  import { mapState } from 'vuex';
+  import { mapState, mapGetters } from 'vuex';
   import * as d3 from 'd3';
 
   export default {
@@ -68,11 +71,23 @@
       };
     },
     computed: {
+      // ...mapState('Map', {
+      //   isLoading: state => state.loading,
+      //   vehiclesError: state => state.hasError,
+      // }),
       ...mapState('Map', {
         isLoading: state => state.loading,
+        vehiclesError: ({ vehicle }) => vehicle.hasError,
+      }),
+      ...mapGetters({
+        vehiclesLoadingState: 'Map/vehiclesLoadingState',
+        vehiclesInvalidState: 'Map/vehiclesInvalidState',
       }),
       showMap() {
         return !this.isLoading;
+      },
+      showError() {
+        return this.vehiclesError;
       },
     },
     components: {
@@ -129,3 +144,22 @@
     },
   };
 </script>
+
+<style lang="scss">
+  .overlay {
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    .spinner {
+      margin-top: 40%;
+    }
+    .error {
+      margin-top: 40%;
+    }
+  }
+</style>

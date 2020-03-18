@@ -17,6 +17,7 @@
     computed: {
       ...mapState('Map', {
         vehiclesList: ({ vehicle }) => vehicle.list || [],
+        vehiclesError: ({ vehicle }) => vehicle.hasError,
       }),
       ...mapGetters({
         vehiclesLoadingState: 'Map/vehiclesLoadingState',
@@ -31,7 +32,9 @@
         this.lastRoute = this.$route.query.routerTag;
         await this.loadVehicle(this.lastRoute);
         this.cleanVehicles();
-        this.drawVehicles();
+        if (!this.vehiclesError) {
+          this.drawVehicles();
+        } 
       },
       cleanVehicles: function() {
         d3.select(this.$refs.layer)
