@@ -1,7 +1,10 @@
 <template>
   <div>
+    <ul class="list-group">
+      <router-link to="./" class="list-group-item list-group-item-action flex-column align-items-start menu-button">All</router-link>
+    </ul>
     <ul class="list-group" v-for="route in routeList" :key="route.tag">
-      <router-link :to="{ name: 'map-route', params: { routerTag: route.tag }}" class="list-group-item list-group-item-action flex-column align-items-start menu-button">{{ route.title }}</router-link>
+      <router-link :to="{ name: 'map-route', query: { routerTag: route.tag }}" class="list-group-item list-group-item-action flex-column align-items-start menu-button">{{ route.title }}</router-link>
     </ul>
   </div>
 </template>
