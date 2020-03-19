@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="menu">
     <ul class="list-group">
       <router-link to="./" class="list-group-item list-group-item-action flex-column align-items-start menu-button">All</router-link>
     </ul>

@@ -72,12 +72,8 @@
     },
     computed: {
       ...mapState('Map', {
-        isLoading: state => state.loading,
+        isLoading: vehicle => vehicle.loading,
         vehiclesError: ({ vehicle }) => vehicle.hasError,
-      }),
-      ...mapGetters({
-        vehiclesLoadingState: 'Map/vehiclesLoadingState',
-        vehiclesInvalidState: 'Map/vehiclesInvalidState',
       }),
       showMap() {
         return !this.isLoading;

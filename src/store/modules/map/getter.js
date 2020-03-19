@@ -1,14 +1,14 @@
 export default {
 	vehiclesLoadingState(state) {
-		if (state.hasError) {
+		if (state.vehicles.hasError) {
 			return 'error';
 		}
 
 		if (state.loading) {
-			return 'loading';
+			return state.loading;
 		}
 	},
 	vehiclesInvalidState(state) {
-		return state.loading || state.hasError;
+		return state.loading || state.vehicles.hasError;
 	},
 };
